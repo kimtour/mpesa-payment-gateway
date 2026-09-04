@@ -1,0 +1,13 @@
+services:
+  gateway:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      SIMULATION_MODE: "true"
+      DATABASE_PATH: "/data/payments.db"
+    volumes:
+      - payment-data:/data
+
+volumes:
+  payment-data:

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>M-Pesa Payment Gateway</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">FINTECH API DEMO</p>
+      <h1>M-Pesa Payment Gateway</h1>
+      <p>Secure STK Push initiation, callback processing and transaction tracking.</p>
+    </div>
+    <span id="health" class="badge">Checking API</span>
+  </header>
+
+  <main>
+    <section class="card payment-card">
+      <h2>Request payment</h2>
+      <form id="payment-form">
+        <label>Phone number<input id="phone" value="0712345678" required></label>
+        <label>Amount, KES<input id="amount" type="number" value="100" min="1" max="150000" required></label>
+        <label>Account reference<input id="reference" value="INV-1001" required></label>
+        <button type="submit">Send STK Push</button>
+      </form>
+      <div id="message" class="message hidden"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-title">
+        <div><p class="eyebrow">AUDIT TRAIL</p><h2>Recent transactions</h2></div>
+        <button class="secondary" id="refresh">Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Reference</th><th>Phone</th><th>Amount</th><th>Status</th><th>Receipt</th><th>Demo</th></tr></thead>
+          <tbody id="transactions"><tr><td colspan="6">Loading transactions...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer><a href="/docs" target="_blank">OpenAPI documentation</a><span>Simulation mode enabled</span></footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>
