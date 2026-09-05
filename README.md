@@ -18,6 +18,9 @@ A production-structured FastAPI demonstration of M-Pesa STK Push initiation, asy
 - Kenyan phone-number normalization and request validation
 - M-Pesa Daraja sandbox integration structure
 - Asynchronous payment state transitions
+- Idempotency-key protection against duplicate payment requests
+- Payment cancellation and simulated refund workflows
+- Status filtering, reference search, analytics and CSV export
 - Callback authentication for the simulated flow
 - SQLite persistence and transaction history
 - Unit and integration testing with pytest
@@ -84,7 +87,11 @@ The repository includes `render.yaml` for a repeatable free-tier Docker deployme
 | `GET` | `/api/health` | Service health check |
 | `POST` | `/api/payments/stk-push` | Initiate an STK Push |
 | `GET` | `/api/payments` | List recent transactions |
+| `GET` | `/api/payments/stats` | Return payment totals and success rate |
+| `GET` | `/api/payments/export.csv` | Export transactions as CSV |
 | `GET` | `/api/payments/{id}` | Retrieve transaction status |
+| `POST` | `/api/payments/{id}/cancel` | Cancel a pending transaction |
+| `POST` | `/api/payments/{id}/refund` | Refund a completed simulated transaction |
 | `POST` | `/api/payments/callback` | Receive a Daraja callback |
 | `POST` | `/api/payments/demo-callback` | Complete a simulated payment |
 
@@ -109,7 +116,7 @@ Copy `.env.example` to `.env`, set `SIMULATION_MODE=false`, then provide the san
 - Payment records retain status history fields for reconciliation and auditing.
 - Production deployments should add an API gateway, rate limits, TLS enforcement, centralized secrets, network allowlists and structured audit logs.
 
-## Interview demonstration
+## Demonstration walkthrough
 
 1. Open the [working dashboard](https://mpesa-payment-gateway.onrender.com) and submit a payment using `0712345678`.
 2. Explain that validation normalizes the number to `254712345678` and stores a `PENDING` transaction.
@@ -117,6 +124,7 @@ Copy `.env.example` to `.env`, set `SIMULATION_MODE=false`, then provide the san
 4. Show the generated receipt and `COMPLETED` status.
 5. Open the [Swagger documentation](https://mpesa-payment-gateway.onrender.com/docs) to demonstrate the REST contract.
 6. Open `tests/` and `.github/workflows/ci.yml` to explain automated quality controls.
+7. Filter the transactions, export CSV, cancel a pending payment and refund a completed payment.
 
 ### Two-minute technical summary
 
@@ -126,6 +134,11 @@ Copy `.env.example` to `.env`, set `SIMULATION_MODE=false`, then provide the san
 - **Testing:** pytest covers validation, API health, STK Push initiation, callback security and state transitions.
 - **Delivery:** GitHub Actions runs tests and builds the Docker image; Render hosts the public demonstration.
 - **Security:** secrets use environment variables, demo callbacks require a token, and errors avoid leaking provider details.
+
+## Documentation
+
+- [Build the project from scratch](docs/BUILD_FROM_SCRATCH.md)
+- [Demo guide](docs/DEMO_GUIDE.md)
 
 ## Disclaimer
 
