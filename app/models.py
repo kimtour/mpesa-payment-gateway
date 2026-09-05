@@ -9,6 +9,8 @@ class PaymentStatus(str, Enum):
     pending = "PENDING"
     completed = "COMPLETED"
     failed = "FAILED"
+    cancelled = "CANCELLED"
+    refunded = "REFUNDED"
 
 
 def normalize_phone(value: str) -> str:
@@ -45,6 +47,18 @@ class PaymentResponse(BaseModel):
     mpesa_receipt_number: str | None = None
     created_at: datetime
     updated_at: datetime
+    idempotency_key: str | None = None
+
+
+class PaymentStats(BaseModel):
+    total_transactions: int
+    pending: int
+    completed: int
+    failed: int
+    cancelled: int
+    refunded: int
+    completed_value: Decimal
+    success_rate: float
 
 
 class DemoCallbackRequest(BaseModel):
