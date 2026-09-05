@@ -2,6 +2,16 @@
 
 A production-structured FastAPI demonstration of M-Pesa STK Push initiation, asynchronous callback processing and transaction tracking. Simulation mode makes the complete payment flow demonstrable without live credentials.
 
+## Live demonstration
+
+| Resource | Link | Use |
+| --- | --- | --- |
+| Working application | [mpesa-payment-gateway.onrender.com](https://mpesa-payment-gateway.onrender.com) | Submit and complete simulated M-Pesa payments |
+| Interactive API documentation | [Swagger UI](https://mpesa-payment-gateway.onrender.com/docs) | Inspect and exercise every REST endpoint |
+| Visual product showcase | [mpesa-payment-gateway-demo.onrender.com](https://mpesa-payment-gateway-demo.onrender.com) | Present the polished payment-console concept |
+
+> The working application uses simulated transactions and never requests an actual M-Pesa PIN. Render's free service can take a short time to wake after inactivity, and its SQLite demo records can reset when the instance restarts.
+
 ## What this project demonstrates
 
 - REST API design with OpenAPI documentation
@@ -54,6 +64,19 @@ pytest --cov=app --cov-report=term-missing
 docker compose up --build
 ```
 
+## Deploy to Render
+
+The repository includes `render.yaml` for a repeatable free-tier Docker deployment. In Render, create a Blueprint from this repository or create a Docker web service with these settings:
+
+| Setting | Value |
+| --- | --- |
+| Branch | `main` |
+| Region | `Frankfurt` |
+| Plan | `Free` |
+| Health check | `/api/health` |
+| Simulation | `SIMULATION_MODE=true` |
+| Demo database | `DATABASE_PATH=/tmp/payments.db` |
+
 ## API endpoints
 
 | Method | Endpoint | Purpose |
@@ -88,12 +111,21 @@ Copy `.env.example` to `.env`, set `SIMULATION_MODE=false`, then provide the san
 
 ## Interview demonstration
 
-1. Open the dashboard and submit a payment.
-2. Show the `PENDING` transaction.
-3. Select **Complete** to simulate the asynchronous M-Pesa callback.
+1. Open the [working dashboard](https://mpesa-payment-gateway.onrender.com) and submit a payment using `0712345678`.
+2. Explain that validation normalizes the number to `254712345678` and stores a `PENDING` transaction.
+3. Select **Complete** to simulate Safaricom's asynchronous callback.
 4. Show the generated receipt and `COMPLETED` status.
-5. Open `/docs` to demonstrate the REST contract.
-6. Open the test and CI files to explain quality controls.
+5. Open the [Swagger documentation](https://mpesa-payment-gateway.onrender.com/docs) to demonstrate the REST contract.
+6. Open `tests/` and `.github/workflows/ci.yml` to explain automated quality controls.
+
+### Two-minute technical summary
+
+- **API:** FastAPI validates requests with Pydantic and publishes an OpenAPI contract.
+- **Integration:** `MpesaGateway` separates the simulated flow from the Daraja sandbox implementation.
+- **Persistence:** SQLite tracks checkout IDs, payment status, callbacks and receipts.
+- **Testing:** pytest covers validation, API health, STK Push initiation, callback security and state transitions.
+- **Delivery:** GitHub Actions runs tests and builds the Docker image; Render hosts the public demonstration.
+- **Security:** secrets use environment variables, demo callbacks require a token, and errors avoid leaking provider details.
 
 ## Disclaimer
 
