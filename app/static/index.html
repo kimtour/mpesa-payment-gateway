@@ -17,6 +17,13 @@
   </header>
 
   <main>
+    <section class="stats-grid" aria-label="Payment statistics">
+      <article class="stat"><span>Total transactions</span><strong id="stat-total">0</strong></article>
+      <article class="stat"><span>Completed value</span><strong id="stat-value">KES 0</strong></article>
+      <article class="stat"><span>Success rate</span><strong id="stat-rate">0%</strong></article>
+      <article class="stat"><span>Pending</span><strong id="stat-pending">0</strong></article>
+    </section>
+
     <section class="card payment-card">
       <h2>Request payment</h2>
       <form id="payment-form">
@@ -31,18 +38,30 @@
     <section class="card">
       <div class="section-title">
         <div><p class="eyebrow">AUDIT TRAIL</p><h2>Recent transactions</h2></div>
-        <button class="secondary" id="refresh">Refresh</button>
+        <div class="toolbar">
+          <select id="status-filter" aria-label="Filter by status">
+            <option value="">All statuses</option>
+            <option value="PENDING">Pending</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="FAILED">Failed</option>
+            <option value="CANCELLED">Cancelled</option>
+            <option value="REFUNDED">Refunded</option>
+          </select>
+          <input id="search" aria-label="Search transactions" placeholder="Reference or phone">
+          <a class="button-link secondary" href="/api/payments/export.csv">Export CSV</a>
+          <button class="secondary" id="refresh">Refresh</button>
+        </div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Reference</th><th>Phone</th><th>Amount</th><th>Status</th><th>Receipt</th><th>Demo</th></tr></thead>
+          <thead><tr><th>Reference</th><th>Phone</th><th>Amount</th><th>Status</th><th>Receipt</th><th>Actions</th></tr></thead>
           <tbody id="transactions"><tr><td colspan="6">Loading transactions...</td></tr></tbody>
         </table>
       </div>
     </section>
   </main>
 
-  <footer><a href="/docs" target="_blank">OpenAPI documentation</a><span>Simulation mode enabled</span></footer>
+  <footer><a href="/docs" target="_blank" rel="noreferrer">OpenAPI documentation</a><span>Simulation mode enabled</span></footer>
   <script src="/static/app.js"></script>
 </body>
 </html>
