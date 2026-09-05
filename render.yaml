@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: mpesa-payment-gateway
+    runtime: docker
+    repo: https://github.com/kimtour/mpesa-payment-gateway
+    branch: main
+    region: frankfurt
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    renderSubdomainPolicy: enabled
+    envVars:
+      - key: SIMULATION_MODE
+        value: "true"
+      - key: DATABASE_PATH
+        value: /tmp/payments.db
